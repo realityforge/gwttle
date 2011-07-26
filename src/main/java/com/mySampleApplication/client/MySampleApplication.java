@@ -41,7 +41,7 @@ public class MySampleApplication implements EntryPoint {
                 addBookToTable(data, book);
             }
         });
-        box.show();
+        box.center();
     }
 
     private void setupTableData() {
