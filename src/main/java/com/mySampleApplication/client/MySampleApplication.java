@@ -13,9 +13,6 @@ import com.google.gwt.user.client.ui.*;
 
 import java.util.ArrayList;
 
-/**
- * Entry point classes define <code>onModuleLoad()</code>
- */
 public class MySampleApplication implements EntryPoint {
 
     interface MySampleApplicationUIBinder extends UiBinder<Widget, MySampleApplication> {
@@ -25,27 +22,12 @@ public class MySampleApplication implements EntryPoint {
 
     public static final ArrayList<Book> BOOKS = new ArrayList<Book>();
 
-    public static class Book {
-        final String title;
-        final String genre;
-        final String author;
-
-        public Book(String title, String genre, String author) {
-            this.title = title;
-            this.genre = genre;
-            this.author = author;
-        }
-    }
-
     @UiField
     FlexTable data;
 
     @UiField
     HasClickHandlers createNewButton;
 
-    /**
-     * This is the entry point method.
-     */
     public void onModuleLoad() {
 
         RootPanel.get("book_content").add(uiBinder.createAndBindUi(this));

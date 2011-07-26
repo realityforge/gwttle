@@ -33,7 +33,7 @@ public class AddBookDialog extends DialogBox {
 
     @UiHandler("saveNewButton")
     public void onOkClick(ClickEvent event) {
-        _handler.addBook(new MySampleApplication.Book(nameField.getText(), genreField.getItemText(genreField.getSelectedIndex()), authorField.getText()));
+        _handler.addBook(new Book(nameField.getText(), genreField.getItemText(genreField.getSelectedIndex()), authorField.getText()));
         hide();
     }
 
