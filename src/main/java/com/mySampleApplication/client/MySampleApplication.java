@@ -34,6 +34,7 @@ public class MySampleApplication implements EntryPoint {
         setupTableData();
     }
 
+    @SuppressWarnings({"UnusedParameters"})
     @UiHandler("createNewButton")
     public void onClick(final ClickEvent event) {
         final AddBookDialog box = new AddBookDialog(new BookAddedHandler() {
