@@ -5,6 +5,9 @@
     <!-- Inherit the core Web Toolkit stuff.                  -->
     <inherits name='com.google.gwt.user.User'/>
 
+    <inherits name='com.google.gwt.user.theme.standard.Standard'/>
+    <inherits name='com.google.gwt.user.theme.chrome.Chrome'/>
+
     <!-- Specify the app entry point class.                   -->
     <entry-point class='com.mySampleApplication.client.MySampleApplication'/>
 
