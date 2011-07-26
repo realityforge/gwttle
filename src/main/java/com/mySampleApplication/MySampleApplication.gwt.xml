@@ -6,5 +6,5 @@
     <inherits name='com.google.gwt.user.theme.standard.Standard'/>
     <inherits name='com.google.gwt.user.theme.chrome.Chrome'/>
 
-    <entry-point class='com.mySampleApplication.client.MySampleApplication'/>
+    <entry-point class='com.mySampleApplication.client.BookRepository'/>
 </module>

@@ -13,12 +13,12 @@ import com.google.gwt.user.client.ui.*;
 
 import java.util.ArrayList;
 
-public class MySampleApplication implements EntryPoint {
+public class BookRepository implements EntryPoint {
 
-    interface MySampleApplicationUIBinder extends UiBinder<Widget, MySampleApplication> {
+    interface BookRepositoryUIBinder extends UiBinder<Widget, BookRepository> {
     }
 
-    private static final MySampleApplicationUIBinder uiBinder = GWT.create(MySampleApplicationUIBinder.class);
+    private static final BookRepositoryUIBinder uiBinder = GWT.create(BookRepositoryUIBinder.class);
 
     public static final ArrayList<Book> BOOKS = new ArrayList<Book>();
 
