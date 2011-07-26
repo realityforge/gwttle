@@ -1,56 +1,44 @@
 package com.mySampleApplication.client;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.*;
 
 public class AddBookDialog extends DialogBox {
+
+    interface AddBookDialogUIBinder extends UiBinder<Widget, AddBookDialog> {
+    }
+
+    private static AddBookDialogUIBinder uiBinder = GWT.create(AddBookDialogUIBinder.class);
+
     private BookAddedHandler _handler;
+    @UiField
+    TextBox nameField;
+    @UiField
+    ListBox genreField;
+    @UiField
+    TextBox authorField;
+    @UiField
+    Button saveNewButton;
+    @UiField
+    Button cancelNewButton;
 
     public AddBookDialog(BookAddedHandler handler) {
         this._handler = handler;
-
-        final VerticalPanel r = new VerticalPanel();
-
-        final TextBox name = addField("Name", r);
-        final TextBox genre = addField("Genre", r);
-        final TextBox author = addField("Author", r);
-
-        final HorizontalPanel panel = new HorizontalPanel();
-
-        final Button ok = new Button("OK");
-        ok.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent event) {
-                _handler.addBook(new MySampleApplication.Book(name.getText(), genre.getText(), author.getText()));
-                hide();
-            }
-        });
-
-        panel.add(ok);
-
-        final Button cancel = new Button("Cancel");
-        cancel.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent event) {
-                hide();
-            }
-        });
-
-        panel.add(cancel);
-
-        r.add(panel);
-
-        add(r);
-
+        setWidget(uiBinder.createAndBindUi(this));
     }
 
-    private TextBox addField(final String name, final VerticalPanel r) {
-        final HorizontalPanel p = new HorizontalPanel();
-        p.add(new Label(name));
-        final TextBox n = new TextBox();
-        p.add(n);
-        r.add(p);
-        return n;
+    @UiHandler("saveNewButton")
+    public void onOkClick(ClickEvent event) {
+        _handler.addBook(new MySampleApplication.Book(nameField.getText(), genreField.getItemText(genreField.getSelectedIndex()), authorField.getText()));
+        hide();
     }
 
-
+    @UiHandler("cancelNewButton")
+    public void onClick(ClickEvent event) {
+        hide();
+    }
 }

@@ -1,0 +1,29 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<g:HTMLPanel>
+		<g:VerticalPanel>
+			<g:HTMLPanel>
+				<table>
+					<tr><td>Name:</td><td><g:TextBox ui:field="nameField"/></td></tr>
+					<tr><td>Author:</td><td><g:TextBox ui:field="authorField"/></td></tr>
+					<tr>
+						<td>Genre:</td>
+						<td>
+							<g:ListBox ui:field="genreField">
+								<g:item>Instructional</g:item>
+								<g:item>Non Fiction</g:item>
+								<g:item>Fiction</g:item>
+							</g:ListBox>
+						</td>
+					</tr>
+					<tr><td>Description:</td><td></td></tr>
+					<!--<tr><td><g:RichTextArea ui:field="descriptionField"/></td></tr>-->
+				</table>
+			</g:HTMLPanel>
+			<g:HorizontalPanel>
+				<g:Button ui:field="saveNewButton">Save</g:Button>
+				<g:Button ui:field="cancelNewButton">Cancel</g:Button>
+			</g:HorizontalPanel>
+		</g:VerticalPanel>
+	</g:HTMLPanel>
+</ui:UiBinder>
