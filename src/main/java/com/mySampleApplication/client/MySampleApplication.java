@@ -1,13 +1,15 @@
 package com.mySampleApplication.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Label;
 
 import java.util.ArrayList;
 
@@ -15,6 +17,11 @@ import java.util.ArrayList;
  * Entry point classes define <code>onModuleLoad()</code>
  */
 public class MySampleApplication implements EntryPoint {
+
+    interface MySampleApplicationUIBinder extends UiBinder<Widget, MySampleApplication> {
+    }
+
+    private static final MySampleApplicationUIBinder uiBinder = GWT.create(MySampleApplicationUIBinder.class);
 
     public static final ArrayList<Book> BOOKS = new ArrayList<Book>();
 
@@ -30,33 +37,38 @@ public class MySampleApplication implements EntryPoint {
         }
     }
 
+    @UiField
+    FlexTable data;
+
+    @UiField
+    HasClickHandlers createNewButton;
+
     /**
      * This is the entry point method.
      */
     public void onModuleLoad() {
 
-        final VerticalPanel verticalPanel = new VerticalPanel();
-        final FlexTable t = new FlexTable();
-        t.setText(0, 0, "Title");
-        t.setText(0, 1, "Genre");
-        t.setText(0, 2, "Author");
-        t.setText(0, 3, "Actions");
-        addBookToTable(t, new Book("Monkey baiting", "Science", "James"));
-        addBookToTable(t, new Book("Monkey Flight Control", "Pseudo-Science", "Ted"));
-        verticalPanel.add(t);
-        final Button button = new Button("Add New");
-        button.addClickHandler( new ClickHandler() {
-            public void onClick(ClickEvent event) {
-                final AddBookDialog box = new AddBookDialog(new BookAddedHandler() {
-                    public void addBook(Book book) {
-                        addBookToTable(t, book);
-                    }
-                });
-                box.show();
+        RootPanel.get("book_content").add(uiBinder.createAndBindUi(this));
+        setupTableData();
+    }
+
+    @UiHandler("createNewButton")
+    public void onClick(final ClickEvent event) {
+        final AddBookDialog box = new AddBookDialog(new BookAddedHandler() {
+            public void addBook(Book book) {
+                addBookToTable(data, book);
             }
         });
-        verticalPanel.add(button);
-        RootPanel.get("book_content").add(verticalPanel);
+        box.show();
+    }
+
+    private void setupTableData() {
+        data.setText(0, 0, "Title");
+        data.setText(0, 1, "Genre");
+        data.setText(0, 2, "Author");
+        data.setText(0, 3, "Actions");
+        addBookToTable(data, new Book("Monkey baiting", "Science", "James"));
+        addBookToTable(data, new Book("Monkey Flight Control", "Pseudo-Science", "Ted"));
     }
 
     private void addBookToTable(final FlexTable t, final Book book) {
