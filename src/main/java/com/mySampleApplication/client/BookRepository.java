@@ -11,10 +11,14 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.mySampleApplication.shared.Book;
+import com.mySampleApplication.shared.LibraryServiceAsync;
+import com.mySampleApplication.shared.LibraryService;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class BookRepository implements EntryPoint {
 
@@ -27,7 +31,7 @@ public class BookRepository implements EntryPoint {
 
     private static final BookRepositoryUIBinder uiBinder = GWT.create(BookRepositoryUIBinder.class);
 
-    public static final ArrayList<Book> BOOKS = new ArrayList<Book>();
+    private static final LibraryServiceAsync libraryServices = GWT.create(LibraryService.class);
 
     @UiField
     FlexTable data;
@@ -38,22 +42,30 @@ public class BookRepository implements EntryPoint {
     public void onModuleLoad() {
 
         RootPanel.get("book_content").add(uiBinder.createAndBindUi(this));
-        setupTableData();
+        rebuildTable();
         timer = new Timer() {
             @Override
             public void run() {
                 BookRepository.alert("Quickly now!");
             }
         };
-        timer.schedule(5000);
+        timer.schedule(5000 * 100);
     }
 
     @SuppressWarnings({"UnusedParameters"})
     @UiHandler("createNewButton")
     public void onClick(final ClickEvent event) {
         final AddBookDialog box = new AddBookDialog(new BookAddedHandler() {
-            public void addBook(Book book) {
-                addBookToTable(data, book);
+            public void addBook(final Book book) {
+                libraryServices.addBook(book, new AsyncCallback<Void>() {
+                    public void onFailure(Throwable caught) {
+                        BookRepository.alert("Danger Will Robinson!");
+                    }
+
+                    public void onSuccess(Void result) {
+                        addBookToTable(data, book, data.getRowCount());
+                    }
+                });
                 timer.cancel();
             }
         });
@@ -65,13 +77,27 @@ public class BookRepository implements EntryPoint {
         data.setText(0, 1, "Genre");
         data.setText(0, 2, "Author");
         data.setText(0, 3, "Actions");
-        addBookToTable(data, new Book("Monkey baiting", "Science", "James"));
-        addBookToTable(data, new Book("Monkey Flight Control", "Pseudo-Science", "Ted"));
     }
 
-    private void addBookToTable(final FlexTable t, final Book book) {
-        BOOKS.add(book);
-        final int row = BOOKS.indexOf(book) + 1;
+    private void rebuildTable() {
+        libraryServices.listBooks(new AsyncCallback<Collection<Book>>() {
+            public void onFailure(Throwable caught) {
+                BookRepository.alert("Danger Will Robinson!");
+            }
+
+            public void onSuccess(Collection<Book> result) {
+                data.removeAllRows();
+                setupTableData();
+                final Book[] bookList = result.toArray(new Book[result.size()]);
+                for (int i = 0; i < bookList.length; i++) {
+                    addBookToTable(data, bookList[i], i + 1);
+                }
+            }
+        });
+    }
+
+    private void addBookToTable(final FlexTable t, final Book book, final int row) {
+
         t.setText(row, 0, book.title);
         t.setText(row, 1, book.genre);
         t.setText(row, 2, book.author);
@@ -84,10 +110,16 @@ public class BookRepository implements EntryPoint {
         final Anchor remove = new Anchor("Remove");
         remove.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
-                final int currentRow = BOOKS.indexOf(book);
-                BOOKS.remove(book);
-                Window.alert("Book " + book.title + " removed");
-                t.removeRow(currentRow + 1);
+                libraryServices.removeBook(book.ID, new AsyncCallback<Void>() {
+                    public void onFailure(Throwable caught) {
+                        BookRepository.alert("Danger Will Robinson!");
+                    }
+
+                    public void onSuccess(Void result) {
+                        Window.alert("Book " + book.title + " removed");
+                        t.removeRow(row);
+                    }
+                });
             }
         });
         final HorizontalPanel panel = new HorizontalPanel();

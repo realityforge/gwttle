@@ -1,11 +1,19 @@
 package com.mySampleApplication.shared;
 
-public class Book {
-    public final String title;
-    public final String genre;
-    public final String author;
+import java.io.Serializable;
 
-    public Book(String title, String genre, String author) {
+public class Book implements Serializable {
+    public String ID;
+    public String title;
+    public String genre;
+    public String author;
+
+    protected Book() {
+        this(null, null, null, null);
+    }
+
+    public Book(String ID, String title, String genre, String author) {
+        this.ID = ID;
         this.title = title;
         this.genre = genre;
         this.author = author;
