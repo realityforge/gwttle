@@ -9,6 +9,18 @@
         <servlet-name>com.mySampleApplication.BookRepository LibraryService</servlet-name>
         <servlet-class>com.mySampleApplication.server.LibraryServiceImpl</servlet-class>
     </servlet>
+
+    <servlet>
+        <servlet-name>BookReviewService</servlet-name>
+        <servlet-class>com.mySampleApplication.server.BookReviewService</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>BookReviewService</servlet-name>
+        <url-pattern>/BookRepository/review/*</url-pattern>
+    </servlet-mapping>
+
+
     <servlet-mapping>
         <servlet-name>com.mySampleApplication.BookRepository LibraryService</servlet-name>
         <url-pattern>/BookRepository/Library</url-pattern>
