@@ -9,12 +9,15 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 
 import java.util.ArrayList;
 
 public class BookRepository implements EntryPoint {
+
+    private Timer timer;
 
     //Not needed because it is the default
     @UiTemplate("BookRepository.ui.xml")
@@ -35,6 +38,13 @@ public class BookRepository implements EntryPoint {
 
         RootPanel.get("book_content").add(uiBinder.createAndBindUi(this));
         setupTableData();
+        timer = new Timer() {
+            @Override
+            public void run() {
+                BookRepository.alert("Quickly now!");
+            }
+        };
+        timer.schedule(5000);
     }
 
     @SuppressWarnings({"UnusedParameters"})
@@ -43,6 +53,7 @@ public class BookRepository implements EntryPoint {
         final AddBookDialog box = new AddBookDialog(new BookAddedHandler() {
             public void addBook(Book book) {
                 addBookToTable(data, book);
+                timer.cancel();
             }
         });
         box.center();
@@ -67,7 +78,6 @@ public class BookRepository implements EntryPoint {
         description.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 Window.alert("Book " + book.title + " is mediocre at best");
-
             }
         });
         final Anchor remove = new Anchor("Remove");
@@ -84,4 +94,11 @@ public class BookRepository implements EntryPoint {
         panel.add(remove);
         t.setWidget(row, 3, panel);
     }
+
+    /**
+     * Example use of JSNI but DON'T do this at home kids.
+     */
+    public static native void alert(final String message) /*-{
+        $wnd.alert(message)
+    }-*/;
 }
