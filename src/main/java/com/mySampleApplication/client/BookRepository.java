@@ -8,14 +8,16 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
-import com.mySampleApplication.client.resources.BookResources;
 
 import java.util.ArrayList;
 
 public class BookRepository implements EntryPoint {
 
+    //Not needed because it is the default
+    @UiTemplate("BookRepository.ui.xml")
     interface BookRepositoryUIBinder extends UiBinder<Widget, BookRepository> {
     }
 
