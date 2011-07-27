@@ -1,9 +1,9 @@
-package com.mySampleApplication.client;
+package com.mySampleApplication.shared;
 
 public class Book {
-    final String title;
-    final String genre;
-    final String author;
+    public final String title;
+    public final String genre;
+    public final String author;
 
     public Book(String title, String genre, String author) {
         this.title = title;
