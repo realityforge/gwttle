@@ -131,9 +131,9 @@ public class BookRepository implements EntryPoint {
         review.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
 
-                final RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URL.encode( GWT.getModuleBaseURL() + "review/" + book.title));
+                final RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URL.encode(GWT.getModuleBaseURL() + "review/" + book.title));
                 try {
-                    final Request request = builder.sendRequest(null, new RequestCallback() {
+                    builder.sendRequest(null, new RequestCallback() {
                         public void onResponseReceived(com.google.gwt.http.client.Request request, Response response) {
                             final Document document = XMLParser.parse(response.getText());
                             final Element documentElement = document.getDocumentElement();
