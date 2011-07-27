@@ -5,6 +5,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.http.client.*;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -13,11 +14,14 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
+import com.google.gwt.xml.client.Document;
+import com.google.gwt.xml.client.Element;
+import com.google.gwt.xml.client.Node;
+import com.google.gwt.xml.client.XMLParser;
 import com.mySampleApplication.shared.Book;
-import com.mySampleApplication.shared.LibraryServiceAsync;
 import com.mySampleApplication.shared.LibraryService;
+import com.mySampleApplication.shared.LibraryServiceAsync;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class BookRepository implements EntryPoint {
@@ -122,9 +126,35 @@ public class BookRepository implements EntryPoint {
                 });
             }
         });
+
+        final Anchor review = new Anchor("See Review");
+        review.addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent event) {
+
+                final RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URL.encode("http://127.0.0.1:8888/BookRepository/review/" + book.title));
+                try {
+                    final Request request = builder.sendRequest(null, new RequestCallback() {
+                        public void onResponseReceived(com.google.gwt.http.client.Request request, Response response) {
+                            final Document document = XMLParser.parse(response.getText());
+                            final Element documentElement = document.getDocumentElement();
+                            final Node item = documentElement.getElementsByTagName("review-text").item(0);
+                            final String value = item.getFirstChild().getNodeValue();
+                            Window.alert(value);
+                        }
+
+                        public void onError(com.google.gwt.http.client.Request request, Throwable exception) {
+                            BookRepository.alert("Danger Will Robinson!");
+                        }
+                    });
+                } catch (final Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         final HorizontalPanel panel = new HorizontalPanel();
         panel.add(description);
         panel.add(remove);
+        panel.add(review);
         t.setWidget(row, 3, panel);
     }
 

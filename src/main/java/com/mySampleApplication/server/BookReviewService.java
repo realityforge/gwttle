@@ -16,7 +16,7 @@ public class BookReviewService extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         try {
             final String uri = request.getRequestURI();
-            final String bookTitle = URLDecoder.decode(uri.substring(uri.lastIndexOf("/"), uri.length()));
+            final String bookTitle = URLDecoder.decode(uri.substring(uri.lastIndexOf("/") + 1, uri.length()));
 
             final Book book = BookServiceFactory.getBookByTitle(bookTitle);
             if (null != book) {
