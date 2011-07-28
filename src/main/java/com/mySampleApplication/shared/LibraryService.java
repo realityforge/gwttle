@@ -15,4 +15,6 @@ public interface LibraryService extends RemoteService {
     void removeBook(String bookID);
 
     Collection<Book> listBooks();
+
+    <T extends Response> T execute(Action<T> action);
 }

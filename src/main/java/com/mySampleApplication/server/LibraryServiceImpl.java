@@ -1,10 +1,8 @@
 package com.mySampleApplication.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.mySampleApplication.shared.Book;
-import com.mySampleApplication.shared.LibraryService;
+import com.mySampleApplication.shared.*;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class LibraryServiceImpl extends RemoteServiceServlet implements LibraryService {
@@ -18,5 +16,9 @@ public class LibraryServiceImpl extends RemoteServiceServlet implements LibraryS
 
     public Collection<Book> listBooks() {
         return BookServiceFactory.listBooks();
+    }
+
+    public <T extends Response> T execute(Action<T> action) {
+        return action.execute(this);
     }
 }

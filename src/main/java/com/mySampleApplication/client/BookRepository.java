@@ -5,7 +5,10 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.http.client.*;
+import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.RequestCallback;
+import com.google.gwt.http.client.Response;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -18,9 +21,7 @@ import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.XMLParser;
-import com.mySampleApplication.shared.Book;
-import com.mySampleApplication.shared.LibraryService;
-import com.mySampleApplication.shared.LibraryServiceAsync;
+import com.mySampleApplication.shared.*;
 
 import java.util.Collection;
 
@@ -61,12 +62,12 @@ public class BookRepository implements EntryPoint {
     public void onClick(final ClickEvent event) {
         final AddBookDialog box = new AddBookDialog(new BookAddedHandler() {
             public void addBook(final Book book) {
-                libraryServices.addBook(book, new AsyncCallback<Void>() {
+                libraryServices.execute(new AddBookAction(book), new AsyncCallback<AddBookResponse>() {
                     public void onFailure(Throwable caught) {
                         BookRepository.alert("Danger Will Robinson!");
                     }
 
-                    public void onSuccess(Void result) {
+                    public void onSuccess(AddBookResponse result) {
                         addBookToTable(data, book, data.getRowCount());
                     }
                 });
@@ -84,15 +85,16 @@ public class BookRepository implements EntryPoint {
     }
 
     private void rebuildTable() {
-        libraryServices.listBooks(new AsyncCallback<Collection<Book>>() {
+        libraryServices.execute(new ListBooksAction(), new AsyncCallback<ListBooksResponse>() {
             public void onFailure(Throwable caught) {
-                BookRepository.alert("Danger Will Robinson!");
+                BookRepository.alert("ListBooksAction: Danger Will Robinson!");
             }
 
-            public void onSuccess(Collection<Book> result) {
+            public void onSuccess(final ListBooksResponse result) {
                 data.removeAllRows();
                 setupTableData();
-                final Book[] bookList = result.toArray(new Book[result.size()]);
+                final Collection<Book> books = result.getBooks();
+                final Book[] bookList = books.toArray(new Book[books.size()]);
                 for (int i = 0; i < bookList.length; i++) {
                     addBookToTable(data, bookList[i], i + 1);
                 }
@@ -114,12 +116,12 @@ public class BookRepository implements EntryPoint {
         final Anchor remove = new Anchor("Remove");
         remove.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
-                libraryServices.removeBook(book.ID, new AsyncCallback<Void>() {
+                libraryServices.execute(new RemoveBookAction(book.ID), new AsyncCallback<RemoveBookResponse>() {
                     public void onFailure(Throwable caught) {
                         BookRepository.alert("Danger Will Robinson!");
                     }
 
-                    public void onSuccess(Void result) {
+                    public void onSuccess(final RemoveBookResponse result) {
                         Window.alert("Book " + book.title + " removed");
                         t.removeRow(row);
                     }
