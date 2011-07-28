@@ -5,41 +5,27 @@
 		  http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          version="2.5">
 
-    <servlet>
-        <servlet-name>com.mySampleApplication.BookRepository LibraryService</servlet-name>
-        <servlet-class>com.mySampleApplication.server.LibraryServiceImpl</servlet-class>
-    </servlet>
+    <filter>
+        <filter-name>GuiceConfig</filter-name>
+        <filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>GuiceConfig</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <servlet>
-        <servlet-name>BookReviewService</servlet-name>
-        <servlet-class>com.mySampleApplication.server.BookReviewService</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>com.mySampleApplication.BookRepository PollerService</servlet-name>
-        <servlet-class>com.mySampleApplication.server.PushServlet</servlet-class>
-    </servlet>
-    <servlet>
-      <servlet-name>eventServiceImpl</servlet-name>
-      <servlet-class>de.novanic.eventservice.service.EventServiceImpl</servlet-class>
+        <servlet-name>eventServiceImpl</servlet-name>
+        <servlet-class>de.novanic.eventservice.service.EventServiceImpl</servlet-class>
     </servlet>
 
     <servlet-mapping>
-      <servlet-name>eventServiceImpl</servlet-name>
-      <url-pattern>/BookRepository/gwteventservice</url-pattern>
+        <servlet-name>eventServiceImpl</servlet-name>
+        <url-pattern>/BookRepository/gwteventservice</url-pattern>
     </servlet-mapping>
 
-    <servlet-mapping>
-        <servlet-name>BookReviewService</servlet-name>
-        <url-pattern>/BookRepository/review/*</url-pattern>
-    </servlet-mapping>
-
-
-    <servlet-mapping>
-        <servlet-name>com.mySampleApplication.BookRepository LibraryService</servlet-name>
-        <url-pattern>/BookRepository/Library</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>com.mySampleApplication.BookRepository PollerService</servlet-name>
-        <url-pattern>/BookRepository/Poller</url-pattern>
-    </servlet-mapping>
+    <listener>
+        <listener-class>com.mySampleApplication.server.GuiceServletConfig</listener-class>
+    </listener>
 </web-app>

@@ -26,8 +26,9 @@
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false" />
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
-    <list size="1">
+    <list size="2">
       <item index="0" class="java.lang.String" itemvalue="com.google.gwt.uibinder.client.UiHandler" />
+      <item index="1" class="java.lang.String" itemvalue="javax.inject.Inject" />
     </list>
   </component>
   <component name="InspectionProjectProfileManager">
@@ -35,6 +36,7 @@
       <profile version="1.0" is_locked="false">
         <option name="myName" value="Project Default" />
         <option name="myLocal" value="false" />
+        <inspection_tool class="GwtServiceNotRegistered" enabled="false" level="ERROR" enabled_by_default="false" />
         <inspection_tool class="JavaDoc" enabled="false" level="WARNING" enabled_by_default="false">
           <option name="TOP_LEVEL_CLASS_OPTIONS">
             <value>
@@ -253,6 +255,15 @@
       <SOURCES>
         <root url="jar://$GWT_TOOLS$/gwt-user.jar!/" />
       </SOURCES>
+    </library>
+    <library name="Support Libs">
+      <CLASSES>
+        <root url="file://$PROJECT_DIR$/lib" />
+        <root url="file://$PROJECT_DIR$/lib" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+      <jarDirectory url="file://$PROJECT_DIR$/lib" recursive="false" />
     </library>
   </component>
 </project>
