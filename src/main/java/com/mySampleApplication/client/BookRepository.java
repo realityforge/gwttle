@@ -22,6 +22,10 @@ import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.XMLParser;
 import com.mySampleApplication.shared.*;
+import de.novanic.eventservice.client.event.Event;
+import de.novanic.eventservice.client.event.RemoteEventServiceFactory;
+import de.novanic.eventservice.client.event.domain.DomainFactory;
+import de.novanic.eventservice.client.event.listener.RemoteEventListener;
 
 import java.util.Collection;
 
@@ -37,6 +41,7 @@ public class BookRepository implements EntryPoint {
     private static final BookRepositoryUIBinder uiBinder = GWT.create(BookRepositoryUIBinder.class);
 
     private static final LibraryServiceAsync libraryServices = GWT.create(LibraryService.class);
+    private static final PollerServiceAsync pollerService = GWT.create(PollerService.class);
 
     @UiField
     FlexTable data;
@@ -55,6 +60,26 @@ public class BookRepository implements EntryPoint {
             }
         };
         timer.schedule(5000 * 100);
+
+        RemoteEventServiceFactory.getInstance().getRemoteEventService().
+                addListener(DomainFactory.getDomain("Magic"), new RemoteEventListener() {
+                    @Override
+                    public void apply(final Event event) {
+                        final BooksUpdateEvent e = (BooksUpdateEvent) event;
+                        rebuildTableFromData(e.getBooks());
+                    }
+                });
+        pollerService.letThereBeBooks(new AsyncCallback<Void>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert("Oh Dash!");
+            }
+
+            @Override
+            public void onSuccess(Void result) {
+                Window.alert("Hoorah!");
+            }
+        });
     }
 
     @SuppressWarnings({"UnusedParameters"})
@@ -91,15 +116,18 @@ public class BookRepository implements EntryPoint {
             }
 
             public void onSuccess(final ListBooksResponse result) {
-                data.removeAllRows();
-                setupTableData();
-                final Collection<Book> books = result.getBooks();
-                final Book[] bookList = books.toArray(new Book[books.size()]);
-                for (int i = 0; i < bookList.length; i++) {
-                    addBookToTable(data, bookList[i], i + 1);
-                }
+                rebuildTableFromData(result.getBooks());
             }
         });
+    }
+
+    private void rebuildTableFromData(Collection<Book> books) {
+        data.removeAllRows();
+        setupTableData();
+        final Book[] bookList = books.toArray(new Book[books.size()]);
+        for (int i = 0; i < bookList.length; i++) {
+            addBookToTable(data, bookList[i], i + 1);
+        }
     }
 
     private void addBookToTable(final FlexTable t, final Book book, final int row) {

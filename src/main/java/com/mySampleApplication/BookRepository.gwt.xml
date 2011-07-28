@@ -8,6 +8,8 @@
     <inherits name='com.google.gwt.user.theme.standard.Standard'/>
     <inherits name='com.google.gwt.user.theme.chrome.Chrome'/>
 
+    <inherits name='de.novanic.eventservice.GWTEventService'/>
+
     <entry-point class='com.mySampleApplication.client.BookRepository'/>
 
     <source path="client"/>

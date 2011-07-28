@@ -14,6 +14,19 @@
         <servlet-name>BookReviewService</servlet-name>
         <servlet-class>com.mySampleApplication.server.BookReviewService</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>com.mySampleApplication.BookRepository PollerService</servlet-name>
+        <servlet-class>com.mySampleApplication.server.PushServlet</servlet-class>
+    </servlet>
+    <servlet>
+      <servlet-name>eventServiceImpl</servlet-name>
+      <servlet-class>de.novanic.eventservice.service.EventServiceImpl</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+      <servlet-name>eventServiceImpl</servlet-name>
+      <url-pattern>/BookRepository/gwteventservice</url-pattern>
+    </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>BookReviewService</servlet-name>
@@ -24,5 +37,9 @@
     <servlet-mapping>
         <servlet-name>com.mySampleApplication.BookRepository LibraryService</servlet-name>
         <url-pattern>/BookRepository/Library</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>com.mySampleApplication.BookRepository PollerService</servlet-name>
+        <url-pattern>/BookRepository/Poller</url-pattern>
     </servlet-mapping>
 </web-app>
