@@ -9,6 +9,7 @@
     <inherits name='com.google.gwt.user.theme.chrome.Chrome'/>
 
     <inherits name='de.novanic.eventservice.GWTEventService'/>
+    <inherits name="net.customware.gwt.presenter.Presenter"/>
 
     <entry-point class='com.mySampleApplication.client.BookRepository'/>
 

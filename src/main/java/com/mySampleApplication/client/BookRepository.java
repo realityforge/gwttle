@@ -26,6 +26,7 @@ import de.novanic.eventservice.client.event.Event;
 import de.novanic.eventservice.client.event.RemoteEventServiceFactory;
 import de.novanic.eventservice.client.event.domain.DomainFactory;
 import de.novanic.eventservice.client.event.listener.RemoteEventListener;
+import net.customware.gwt.presenter.client.DefaultEventBus;
 
 import java.util.Collection;
 
@@ -85,8 +86,11 @@ public class BookRepository implements EntryPoint {
     @SuppressWarnings({"UnusedParameters"})
     @UiHandler("createNewButton")
     public void onClick(final ClickEvent event) {
-        final AddBookDialog box = new AddBookDialog(new BookAddedHandler() {
-            public void addBook(final Book book) {
+
+        final DefaultEventBus eventBus = new DefaultEventBus();
+        eventBus.addHandler(RequestBookAddEvent.TYPE, new RequestBookAddEvent.RequestBookAddEventHandler() {
+            @Override
+            public void requestBook(final Book book) {
                 libraryServices.execute(new AddBookAction(book), new AsyncCallback<AddBookResponse>() {
                     public void onFailure(Throwable caught) {
                         BookRepository.alert("Danger Will Robinson!");
@@ -99,7 +103,8 @@ public class BookRepository implements EntryPoint {
                 timer.cancel();
             }
         });
-        box.center();
+        final AddBookPresenter presenter = new AddBookPresenter(new AddBookDialog(), eventBus);
+        presenter.onBind();
     }
 
     private void setupTableData() {
