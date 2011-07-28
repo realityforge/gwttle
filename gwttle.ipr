@@ -237,6 +237,9 @@
       <method />
     </configuration>
   </component>
+  <component name="SvnBranchConfigurationManager">
+    <option name="mySupportsUserInfoFilter" value="true" />
+  </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
   </component>
@@ -244,11 +247,11 @@
   <component name="libraryTable">
     <library name="gwt-user">
       <CLASSES>
-        <root url="jar:///opt/gwt-2.3.0/gwt-user.jar!/" />
+        <root url="jar://$GWT_TOOLS$/gwt-user.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES>
-        <root url="jar:///opt/gwt-2.3.0/gwt-user.jar!/" />
+        <root url="jar://$GWT_TOOLS$/gwt-user.jar!/" />
       </SOURCES>
     </library>
   </component>
